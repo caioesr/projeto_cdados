@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CDados</title>
+</head>
+<body style="font-family: Courier; letter-spacing: 0.001em;">
+	<div style = "margin: 0 auto; width: 70%">
+		<h1 style="text-align: center;">Projeto final de Ciência dos dados - 2020/1</h1>
+		<div style="text-align: center;">
+			<h3>Caio Emmanuel Soares Rocha - caioesr@al.insper.edu.br</h3>
+			<h3>Diego Saragoza da Silva - diegoss3@al.insper.edu.br</h3>
+			<h3>Gabriel de Castro Ribeiro - gabrielcr2@al.insper.edu.br</h3>
+		</div>
+		<h2 style="text-align: center; padding-top: 2em">Detector de fraudes bancárias</h2>
+		<div style="text-align: center; display: flex; justify-content: space-between; padding-top: 1em">
+			<a href="#Introdução">Introdução</a>
+			<a href="#Análise_Exploratória">Análise Exploratória</a>
+			<a href="#Previsoes">Previsões</a>
+			<a href="#Tunning_do_modelo">Tunning do Modelo</a>
+		</div>
+		<a name = "Introdução">
+		<h4 style="text-align: center; padding-top: 2em">Introdução</h4>
+		<div style="text-align: center;">
+			<p>Este é o projeto final de Ciência dos dados de 2020/1. Este projeto tem como intuito a construção de uma análise com um grau elevado de autonomia por parte de nós, alunos, e com escolha de tema livre.</p>
+			<p>Sobre a ultima afirmação, escolhemos um dataset que nos tras dados sobre transações bancárias e a classificação delas como fraudes ou não fraudes (0 ou 1). Por ser um dataset que trata de um assunto extremamente delicado, os idealizadores do mesmo não puderam disponibilizar o verdadeiro nome das features (ou colunas), com isso, nossa análise teve que se estreitar apenas em  uma análise de dados pura e rigida para conseguirmos tirar o maior potencial o possível de nosso modelo preditivo.</p>
+			<p>Como dito no título, usamos um classificador chamado Random Forest Classifier que, de maneira simplificada, usa diversas Decision Trees para minimizar a entropia do modelo e fazer classificações que estão de acordo com a relação entre as features.</p>
+		</div>
+		<a name = "Análise_Exploratória">
+		<h4 style="text-align: center; padding-top: 2em">Análise Exploratória</h4>
+		<div style="text-align: center;">
+			<p>Começamos como qualquer outro projeto de data science, fazendo uma análise exploratória no dataset que tinhamos escolhido. Logo de cara percebemos um grande problema, a razão de fraudes e de não fraudes era absurdamente diferente, tinhamos aproximadamente 99.8% dos casos como não fraude e 0.02% como fraudes. O gráfico a seguir ilustra bem o caso.</p>
+			<img src="media/class_plot.png">
+			<p>É imperceptivel a barra que descreve as não fraudes. Caso continuassemos a trabalhar com essa proporção de classes, acabariamos por treinar um classificador que chutava as previsões e, claramente, acharia que não ser uma fraude é um padrão, fazendo todos (ou quase todos) os seus chutes como não fraudes.</p>
+			<p>Fizemos um teste com um modelo Decision Tree Classifier simples usando essa configuração de proporção de classes com o intuito de demonstrar o quão ruim seria o resultado final. Chegamos a uma acurácia de 99.9%, que a primeira vista parece perfeita, não? Na verdade não, quando olhamos para o recall score do modelo vemos que ele nos retorna um valor de apenas 70% que, para nossos padrões, não serviria para um modelo preditivo concreto.</p>
+			<p>Para resolver esse problema, diminuimos o dataset para termos o mesmo número de casos em cada classe (aproximadamente 500 casos para cada), passamos assim de um dataset de mais de 280000 linhas, para pouco mais de 950 com a clara divisão homogênea de classes.</p>
+			<img src="media/class_plot_reduced.png">
+			<p>Agora nós podemos seguir com a nossa análise. Plotamos em seguida algumas distribuições das features em relação as nossas duas classes. Veja alguns exemplos a seguir.</p>
+			<div style="float: left;">
+				<img src="media/dist_time.png" style="float: left;">
+				<img src="media/dist_v1.png" style="float: right;">
+				<img src="media/dist_v2.png" style="float: left;">
+				<img src="media/dist_v3.png" style="float: right;">
+			</div>
+			<p>Agora que temos uma representação visual de como as nossas features se relacionam com as nossas classes, podemos eliminar algumas delas para que o poder computacional do nosso modelo diminua já que iremos remover colunas do nosso dataset que não são tão importantes para o treinamento do classificador. Começamos por achar as correlações das features e separamos elas em as 10 com maior correlação e as 10 com menor correlação, tudo para facilitar a visualização e o entendimento do processo.</p>
+			<div style="float: left; width: 100%; margin-bottom: 1.5em">
+				<img src="media/high_correlation.png" style="float: left;">
+				<img src="media/low_correlation.png" style="float: right;">
+			</div>
+			<p>Para que fique mais claro todo o conteúdo apresentado sobre correlação, montamos um heat map das features. A ideia é, quanto mais quente (vermelho) maior é a importância da feature no dataset em relação a feature de comparação e, quanto mais azul (frio), menor sua importância (entenda importância como correlação).</p>
+			<p style="font-weight: bold;">Devido ao tamanho da imagem do heat map, nós não iremos mostrar ela nessa página, caso fizéssemos, perderiamos qualidade e seria muito difícil enxergar o gráfico sem distorce-lo. Por isso, caso queira vê-lo, clique <a href="media/heat_map.png">aqui</a> para ir a uma página separada e visualiza-lo.</p>
+			<p>Fizemos também visualizações por box plot, veja a seguir algumas delas.</p>
+			<div style="float: left; padding-bottom: 2em">
+				<img src="media/box_plot_time.png" style="float: left;">
+				<img src="media/box_plot_v1.png" style="float: right;">
+				<img src="media/box_plot_v2.png" style="float: left;">
+				<img src="media/box_plot_v3.png" style="float: right;">
+			</div>
+			<a name = "Previsoes">
+			<h4 style="text-align: center;">Previsões</h4>
+			<div style="text-align: center;">
+				<p>Agora que fizemos nossa análise exploratória, podemos enfim fazer algumas previsões. Começamos por separar nosso dataset em dois, um servirá para treino do modelo e o outro servirá para testarmos os parametros do mesmo. Usamos uma razão de 20% para teste e os outros 80% para treino. Decidimos começar testando quatro classificadores, o já citado Decision Tree Classifier, Logistic Regression, Voting Classifier e por último o Random Forest Classifier. Fizemos uma relação das caracteristicas de cada modelo para que pudessemos ver a performance de cada um usando uma função da biblioteca sklearn chamada classification_report, ela nos retorna uma matriz com alguns parametros do modelo como f1_score, recall_score e precision. Segue as matrizes em questão.</p>
+				<div style="float: left; padding-bottom: 2em">
+					<img src="media/logistic_regression_matrix.png" style="float: left;">
+					<img src="media/decision_tree_matrix.png" style="float: right;">
+					<img src="media/voting_classifier_matrix.png" style="float: left;">
+					<img src="media/random_forest_matrix.png" style="float: right;">
+				</div>
+				<p>Podemos ver que quem possui a maior performance é o Random Forest Classifier, mesmo assim, vamos plotar um gráfico tipo ROC (Receiver Operating Characteristic Curve), este plot nos retorna uma representação gráfica da performance de um modelo classificador binário conforme seu limiar de discriminação aumenta. Os parametros desse plot são o RPV (razão de positivos verdadeiros dividido pelos positivos totais do sistema) e o RPF (razão de falsos positivos dividido pelos negativos totais do sistema). Veja o plot a seguir.</p>
+				<img src="media/roc_models.png" style="max-width: 100%">
+				<p>É interessante notar que ao contrário do que tinhamos dito sobre o Random Forest Classifier, o Logistic Regression converge muito mais rápido para 1 do que o Random Forest. Mesmo assim, para o nosso classificador final vamos usar o Random Forest Classifier.</p>
+			</div>
+			<a name = "Tunning_do_modelo">
+			<h4 style="text-align: center;">Tunning do modelo</h4>
+			<div style="text-align: center;">
+				<p>Como dito antes, escolhemos o Random Forest Classifier como o modelo final, contudo, seu parametros foram escolhidos de maneira arbitrária, assim talvez, não estamos tirando o maior potêncial do modelo. Pra resolver esse problema vamos usar o RandomizedSearchCV, ele precisa receber uma lista de hiperparametros (possíveis parametros para o modelo de classificação), no nosso caso, devemos passar parametros coerentes com o Random Forest Classifier tais como n_estimators, max_features, criterion e bootstrap. A função fará várias iterações em cima desses hiperparametros validando-os por cruzamento (cross validation). Quando terminar as iterações, podemos fitar os modelos e isolar o melhor deles. Segue a visualização dos parametros do melhor modelo encontrado e os dados de performance.</p>
+				<div style="float: left; width: 100%; margin-bottom: 1.5em">
+					<img src="media/random_forest_best.png" style="float: left; max-width: 50%">
+					<img src="media/random_forest_best_matrix.png" style="float: left; max-width: 50%">
+				</div>
+				<p>Mesmo que de uma maneira sutil, conseguimos melhorar ainda mais o nosso modelo, finalizando assim nosso projeto.</p>
+			</div>
+	</div>
+</body>
+</html>

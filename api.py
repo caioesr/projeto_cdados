@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-@author: Caio Emmanuel
+@author: Caio Emmanuel e Diego Saragoza da Silva
 """
 
 from sklearn.externals import joblib
@@ -9,11 +9,19 @@ import numpy as np
 import pandas as pd
 from flasgger import Swagger
 
-from flask import Flask, request
+from flask import Flask, request, render_template, send_from_directory
 app = Flask(__name__)
 swagger = Swagger(app)
 
 final_clf = joblib.load('./final_clf.pkl')
+
+@app.route('/media/<path:filename>')
+def page_send_file(filename):
+    return send_from_directory('media', filename)
+
+@app.route('/')
+def page_index():
+    return render_template('index.html')
 
 @app.route('/detect_fraud', methods=['POST'])
 def predict_digit():
@@ -37,4 +45,5 @@ def predict_digit():
     return predictions_dict
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()
