@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CDADOS</title>
+</head>
+<body style="font-family: Courier; letter-spacing: 0.001em;">
+	<div style = "margin: 0 auto; width: 70%">
+		<h1 style="text-align: center;">Modelo preditivo</h1>
+		<p>Neste página você poderá usar o modelo para prever se alguma transação bancária é fraude ou não. Tudo que você precisa fazer é submeter um arquivo to tipo csv para que nosso preditor faça o trabalho de classifica-lo como fraude ou não. Você pode enviar diversos casos (como uma tabela) de transações bancárias, o modelo irá retornar a classificação de todas elas.</p>
+		<form method = "POST" enctype=multipart/form-data style="float: left; padding-top: 2em">
+			<input type="file" name="CSV file">
+			<input type="submit" name="submit" formaction="detect_fraud" style="margin-left: 2em">
+		</form>
+	</div>
+</body>
+</html>

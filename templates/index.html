@@ -17,13 +17,13 @@
 			<a href="#Análise_Exploratória">Análise Exploratória</a>
 			<a href="#Previsoes">Previsões</a>
 			<a href="#Tunning_do_modelo">Tunning do Modelo</a>
+			<a href="/model">Usar o Modelo</a>
 		</div>
 		<a name = "Introdução">
 		<h4 style="text-align: center; padding-top: 2em">Introdução</h4>
 		<div style="text-align: center;">
 			<p>Este é o projeto final de Ciência dos dados de 2020/1. Este projeto tem como intuito a construção de uma análise com um grau elevado de autonomia por parte de nós, alunos, e com escolha de tema livre.</p>
 			<p>Sobre a ultima afirmação, escolhemos um dataset que nos tras dados sobre transações bancárias e a classificação delas como fraudes ou não fraudes (0 ou 1). Por ser um dataset que trata de um assunto extremamente delicado, os idealizadores do mesmo não puderam disponibilizar o verdadeiro nome das features (ou colunas), com isso, nossa análise teve que se estreitar apenas em  uma análise de dados pura e rigida para conseguirmos tirar o maior potencial o possível de nosso modelo preditivo.</p>
-			<p>Como dito no título, usamos um classificador chamado Random Forest Classifier que, de maneira simplificada, usa diversas Decision Trees para minimizar a entropia do modelo e fazer classificações que estão de acordo com a relação entre as features.</p>
 		</div>
 		<a name = "Análise_Exploratória">
 		<h4 style="text-align: center; padding-top: 2em">Análise Exploratória</h4>
@@ -62,8 +62,7 @@
 				<div style="float: left; padding-bottom: 2em">
 					<img src="media/logistic_regression_matrix.png" style="float: left;">
 					<img src="media/decision_tree_matrix.png" style="float: right;">
-					<img src="media/voting_classifier_matrix.png" style="float: left;">
-					<img src="media/random_forest_matrix.png" style="float: right;">
+					<img src="media/random_forest_matrix.png" style="float: left;">
 				</div>
 				<p>Podemos ver que quem possui a maior performance é o Random Forest Classifier, mesmo assim, vamos plotar um gráfico tipo ROC (Receiver Operating Characteristic Curve), este plot nos retorna uma representação gráfica da performance de um modelo classificador binário conforme seu limiar de discriminação aumenta. Os parametros desse plot são o RPV (razão de positivos verdadeiros dividido pelos positivos totais do sistema) e o RPF (razão de falsos positivos dividido pelos negativos totais do sistema). Veja o plot a seguir.</p>
 				<img src="media/roc_models.png" style="max-width: 100%">
@@ -78,6 +77,8 @@
 					<img src="media/random_forest_best_matrix.png" style="float: left; max-width: 50%">
 				</div>
 				<p>Mesmo que de uma maneira sutil, conseguimos melhorar ainda mais o nosso modelo, finalizando assim nosso projeto.</p>
+				<p>A titulo de curiosidade, a imagem a seguir mostra como ficou a Decision Tree do nosso modelo depois que estava pronto.</p>
+				<img src="media/decision_tree_complete.png" style="max-width: 100%; max-height: 50%">
 			</div>
 	</div>
 </body>

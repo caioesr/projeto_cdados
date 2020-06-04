@@ -23,6 +23,10 @@ def page_send_file(filename):
 def page_index():
     return render_template('index.html')
 
+@app.route('/model')
+def page_model():
+    return render_template('model.html')
+
 @app.route('/detect_fraud', methods=['POST'])
 def predict_digit():
     """Example endpoint returning a detection of a fraud
@@ -33,7 +37,7 @@ def predict_digit():
           type: file
           required: true
     """
-    dataset = pd.read_csv(request.files['CSV File'])
+    dataset = pd.read_csv(request.files['CSV file'])
     X_test = dataset.loc[:dataset.shape[0]]
     #X_test = np.array(dataset.loc[0])
     #X_test = X_test.reshape(1,-1)
@@ -42,7 +46,10 @@ def predict_digit():
     predictions_dict = {}
     for i in range(dataset.shape[0]):
         predictions_dict[i] = ("FRAUD" if y_pred[i] == 1 else "NON FRAUD")
-    return predictions_dict
+
+    df = pd.DataFrame.from_dict(predictions_dict, orient = 'index').to_html()
+
+    return df
 
 if __name__ == '__main__':
     app.debug = True
